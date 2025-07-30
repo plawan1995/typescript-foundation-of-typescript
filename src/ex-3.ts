@@ -1,4 +1,5 @@
-const ordersSample = [
+//declared order with arr
+const ordersSample: Order[] = [
   {
     orderId: "ORD001",
     status: "pending",
@@ -94,15 +95,37 @@ const ordersSample = [
 ];
 
 //Start Coding Here
+type OrderStatus = "pending" | "shipped" | "delivered" | "cancelled";
+interface Order {
+  orderId: string;
+  status: OrderStatus;
+  productName: string;
+  price: number;
+  quantity: number;
+  discount?: number;
+}
+function totalByStatusWithDiscount(
+  orders: Order[],
+  targetStatus: OrderStatus
+): number {
+  return orders
+    .filter(o => o.status === targetStatus) // เลือกod ร์ที่ status ตรงกับ ta
+    .reduce((sum, o) => { // เอาทุกออเดอร์ที่กรองมา cal
+      const subtotal = o.price * o.quantity; // total no discount
+      const disc     = o.discount ?? 0; // dis
+      return sum + (subtotal - disc); //resukl
+    }, 0);
+}
 
-const totalShipped = totalByStatusWithDiscount(orders, "shipped");
+
+const totalShipped = totalByStatusWithDiscount(ordersSample, "shipped");
 console.log("Total for shipped orders with discount:", totalShipped);
 
-const totalPending = totalByStatusWithDiscount(orders, "pending");
+const totalPending = totalByStatusWithDiscount(ordersSample, "pending");
 console.log("Total for pending orders:", totalPending);
 
-const totalDelivered = totalByStatusWithDiscount(orders, "delivered");
+const totalDelivered = totalByStatusWithDiscount(ordersSample, "delivered");
 console.log("Total for delivered orders:", totalDelivered);
 
-const totalCancelled = totalByStatusWithDiscount(orders, "cancelled");
+const totalCancelled = totalByStatusWithDiscount(ordersSample, "cancelled");
 console.log("Total for cancelled orders:", totalCancelled);
